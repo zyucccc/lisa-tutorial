@@ -1,0 +1,67 @@
+class extendedSignDomain {
+/*
+    basic() {
+        def i = 2;       // i (POS)
+        def j = -10;     // j (NEG)
+        def z = 0;       // z (ZERO)
+
+        // add
+        def a1 = i + j;  // POS + NEG = TOP
+        def a2 = i + z;  // POS + ZERO = POS
+        def a3 = j + z;  // NEG + ZERO = NEG
+
+        // sub
+        def s1 = i - j;  // POS - NEG = POS
+        def s2 = j - i;  // NEG - POS = NEG
+        def s3 = z - i;  // ZERO - POS = NEG
+        def s4 = z - j;  // ZERO - NEG = POS
+
+        // mul
+        def m1 = i * j;  // POS * NEG = NEG
+        def m2 = j * i;  // NEG * POS = NEG
+        def m3 = i * z;  // POS * ZERO = ZERO
+        def m4 = j * z;  // NEG * ZERO = ZERO
+
+        // div
+        def d1 = i / j;  // POS / NEG = NEG
+        def d2 = j / i;  // NEG / POS = NEG
+    }
+
+    // loop + refinement
+    whileLoop(a) {
+        def x = 0;       // x ZERO
+        while(x < a)     // x < a
+            x = x + 1;   //then etat de sortie :  x >= 0
+    }
+
+*/
+    conditionals() {
+        def i = 0;       // i ZERO
+        def j = 5;       // j POS
+        def k = -3;      // k NEG
+
+        if(i > 0) {      // false (ZERO > POS)
+            i = 10;
+        } else {
+            i = -10;     // i = NEG
+        }
+
+        if(j > 0) {      // true  (POS > ZERO)
+            j = j * 2;   // j == POS
+        }
+
+        if(k < 0) {      // true (NEG < ZERO)
+            k = k - 5;   // k == NEG
+        }
+
+        def x = 0;       // x ZERO
+        if(x == 0) {     // true
+            x = 1;       // x == POS
+        }
+
+        def y = x * k;   // POS * NEG = NEG
+    }
+/*
+
+
+}
