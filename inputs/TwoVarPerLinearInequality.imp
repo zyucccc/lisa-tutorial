@@ -1,0 +1,43 @@
+class TwoVarPerLinearInequality {
+
+    basic() {
+        def x = 10;
+        def y = 5;
+
+        //instantiate des inequality
+        if (x <= y + 5) {  //  x ≤ y + 5
+            x = y + 2;     //  x = y + 2， = x ≤ y + 2 = y ≤ x - 2
+        }
+
+        def z = x - y;     //  z = x - y
+
+        if (z > 0) {       //  z > 0
+            y = y + z;     //  y = y + z
+        }
+
+        // constraint for constant
+        def w = 0;
+        if (x >= 2 * w) {  //  x ≥ 0
+            w = x / 2;     //  w = x / 2
+        }
+
+        return z;
+    }
+
+/*
+    max(x, y) {
+        if (x >= y) {
+            return x;
+        } else {
+            return y;
+        }
+    }
+    abs(x) {
+
+        if (x < 0) {
+            return -x;
+        } else {
+            return x;
+        }
+    }*/
+}
