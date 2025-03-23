@@ -1,15 +1,11 @@
 package it.unive.lisa.tutorial;
 
-import it.unive.lisa.analysis.Lattice;
-import it.unive.lisa.analysis.SemanticException;
-import it.unive.lisa.analysis.SemanticOracle;
+import it.unive.lisa.analysis.*;
 import it.unive.lisa.analysis.lattices.Satisfiability;
 import it.unive.lisa.analysis.nonrelational.value.BaseNonRelationalValueDomain;
 import it.unive.lisa.analysis.nonrelational.value.ValueEnvironment;
 import it.unive.lisa.program.cfg.ProgramPoint;
-import it.unive.lisa.symbolic.value.Constant;
-import it.unive.lisa.symbolic.value.ValueExpression;
-import it.unive.lisa.symbolic.value.Variable;
+import it.unive.lisa.symbolic.value.*;
 import it.unive.lisa.symbolic.value.operator.AdditionOperator;
 import it.unive.lisa.symbolic.value.operator.DivisionOperator;
 import it.unive.lisa.symbolic.value.operator.MultiplicationOperator;
@@ -18,13 +14,25 @@ import it.unive.lisa.symbolic.value.operator.binary.*;
 import it.unive.lisa.util.representation.StringRepresentation;
 import it.unive.lisa.util.representation.StructuredRepresentation;
 
-public class ExtendedSignDomain implements BaseNonRelationalValueDomain<ExtendedSignDomain> {
+import java.util.function.Predicate;
+
+public class ExtendedSignDomain implements BaseNonRelationalValueDomain<ExtendedSignDomain>, SemanticDomain<ExtendedSignDomain, ValueExpression, Identifier> {
 
     private final ExtendedSign sign;
 
     //constructor
     public ExtendedSignDomain(ExtendedSign extendedSign) {
         this.sign = extendedSign;
+    }
+
+    @Override
+    public ExtendedSignDomain pushScope(ScopeToken scopeToken) throws SemanticException {
+        return this;
+    }
+
+    @Override
+    public ExtendedSignDomain popScope(ScopeToken scopeToken) throws SemanticException {
+        return this;
     }
 
 
@@ -862,6 +870,65 @@ public class ExtendedSignDomain implements BaseNonRelationalValueDomain<Extended
         return environment.putState(var, refinedState);
     }
 
+
+    @Override
+    public ExtendedSignDomain assign(Identifier identifier, ValueExpression valueExpression, ProgramPoint programPoint, SemanticOracle semanticOracle) throws SemanticException {
+        return smallStepSemantics(valueExpression, programPoint, semanticOracle);
+    }
+
+    @Override
+    public ExtendedSignDomain smallStepSemantics(ValueExpression valueExpression, ProgramPoint programPoint, SemanticOracle semanticOracle) throws SemanticException {
+        if (valueExpression instanceof Constant) {
+            return evalNonNullConstant((Constant) valueExpression, programPoint, semanticOracle);
+        } else if (valueExpression instanceof BinaryExpression) {
+            BinaryExpression binaryExpression = (BinaryExpression) valueExpression;
+            ExtendedSignDomain left = smallStepSemantics((ValueExpression) binaryExpression.getLeft(), programPoint, semanticOracle);
+            ExtendedSignDomain right = smallStepSemantics((ValueExpression) binaryExpression.getRight(), programPoint, semanticOracle);
+            return evalBinaryExpression(binaryExpression.getOperator(), left, right, programPoint, semanticOracle);
+        } else {
+            return TOP;
+        }
+    }
+
+    @Override
+    public ExtendedSignDomain assume(ValueExpression valueExpression, ProgramPoint programPoint, ProgramPoint programPoint1, SemanticOracle semanticOracle) throws SemanticException {
+        Satisfiability sat = satisfies(valueExpression, programPoint, semanticOracle);
+
+        if (sat == Satisfiability.NOT_SATISFIED) {
+            return BOTTOM;
+        } else {
+            return this;
+        }
+    }
+
+    public boolean knowsIdentifier(Identifier identifier) {
+        return true;
+    }
+
+    @Override
+    public ExtendedSignDomain forgetIdentifier(Identifier identifier) throws SemanticException {
+        return this;
+    }
+
+    @Override
+    public ExtendedSignDomain forgetIdentifiersIf(Predicate<Identifier> predicate) throws SemanticException {
+        return this;
+    }
+
+    @Override
+    public Satisfiability satisfies(ValueExpression valueExpression, ProgramPoint programPoint, SemanticOracle semanticOracle) throws SemanticException {
+        ExtendedSignDomain result = smallStepSemantics(valueExpression, programPoint, semanticOracle);
+
+        if (result.isBottom()) {
+            return Satisfiability.BOTTOM;
+        } else if (result.sign == ExtendedSign.ZERO) {
+            return Satisfiability.NOT_SATISFIED;
+        } else if (result.sign == ExtendedSign.POS || result.sign == ExtendedSign.NEG || result.sign == ExtendedSign.NON_ZERO) {
+            return Satisfiability.SATISFIED;
+        } else {
+            return Satisfiability.UNKNOWN;
+        }
+    }
 
 
 }

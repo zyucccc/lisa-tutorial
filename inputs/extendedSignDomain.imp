@@ -1,5 +1,5 @@
 class extendedSignDomain {
-/*
+
     basic() {
         def i = 2;       // i (POS)
         def j = -10;     // j (NEG)
@@ -26,7 +26,7 @@ class extendedSignDomain {
         def d1 = i / j;  // POS / NEG = NEG
         def d2 = j / i;  // NEG / POS = NEG
     }
-
+/*
     // loop + refinement
     whileLoop(a) {
         def x = 0;       // x ZERO
@@ -34,7 +34,7 @@ class extendedSignDomain {
             x = x + 1;   //then etat de sortie :  x >= 0
     }
 
-*/
+
     conditionals() {
         def i = 0;       // i ZERO
         def j = 5;       // j POS
@@ -61,7 +61,7 @@ class extendedSignDomain {
 
         def y = x * k;   // POS * NEG = NEG
     }
-/*
 
+*/
 
 }
