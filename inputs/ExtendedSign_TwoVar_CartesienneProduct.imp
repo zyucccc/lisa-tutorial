@@ -1,0 +1,38 @@
+class product {
+    test() {
+        def x = 10;    // - ExtendedSign: POS
+        def y = 0;     // - ExtendedSign: ZERO
+        def z = -5;    //  - ExtendedSign: NEG
+
+        // extendedSignDomain
+        if (y == 0) {  // ==0
+            x = x + 1; // x > 0
+        }
+
+        if (x > 0) {   // >0
+            y = z;     // y < 0  z < 0
+                       // : y < 0, z < 0, y = z
+        }
+
+        // TwoVarPerLinearInequality
+        if (x + y > z) {  // inequality
+            z = x - y;
+                        //  z = x - y
+        }
+
+        def w = 0;
+        if (x > z && y < 0) {  // sign and inequality at the same time
+            w = x + y;         // + "+" -
+                                 //  w = x + y
+        }
+
+        if (w <= x) {
+            z = w + y;
+            // z = w + y
+        }
+
+        if (x + y == z) {
+            w = -w;    // w = -w
+        }
+    }
+}
