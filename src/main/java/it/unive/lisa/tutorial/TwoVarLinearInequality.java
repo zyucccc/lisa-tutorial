@@ -401,8 +401,28 @@ public class TwoVarLinearInequality extends FunctionalLattice<TwoVarLinearInequa
             double c = ineq.getConstant();
 
             // check if ils ont les mêmes variables
-            if (!inequality.getVar1().equals(ineq.getVar1()) ||
-                    !inequality.getVar2().equals(ineq.getVar2())) {
+//            if (!inequality.getVar1().equals(ineq.getVar1()) ||
+//                    !inequality.getVar2().equals(ineq.getVar2())) {
+//                continue;
+//            }
+            boolean var1Equal = false;
+            boolean var2Equal = false;
+
+            if (inequality.getVar1() == null && ineq.getVar1() == null) {
+                var1Equal = true;
+            } else if (inequality.getVar1() != null && ineq.getVar1() != null &&
+                    inequality.getVar1().equals(ineq.getVar1())) {
+                var1Equal = true;
+            }
+
+            if (inequality.getVar2() == null && ineq.getVar2() == null) {
+                var2Equal = true;
+            } else if (inequality.getVar2() != null && ineq.getVar2() != null &&
+                    inequality.getVar2().equals(ineq.getVar2())) {
+                var2Equal = true;
+            }
+
+            if (!var1Equal || !var2Equal) {
                 continue;
             }
 

@@ -15,29 +15,7 @@ class TwoVarPerLinearInequality {
             y = y + z;     //  y = y + z
         }
 
-        // constraint for constant
-        def w = 0;
-        if (x >= 2 * w) {  //  x ≥ 0
-            w = x / 2;     //  w = x / 2
-        }
-
         return z;
     }
 
-/*
-    max(x, y) {
-        if (x >= y) {
-            return x;
-        } else {
-            return y;
-        }
-    }
-    abs(x) {
-
-        if (x < 0) {
-            return -x;
-        } else {
-            return x;
-        }
-    }*/
 }

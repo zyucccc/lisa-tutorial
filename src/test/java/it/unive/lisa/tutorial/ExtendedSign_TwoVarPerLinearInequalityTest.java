@@ -27,7 +27,7 @@ public class ExtendedSign_TwoVarPerLinearInequalityTest {
                 new FieldSensitivePointBasedHeap(),
                 new ExtendedSign_TwoVarPerLinearInequality_Cartesian(),
                 DefaultConfiguration.defaultTypeDomain());
-
+//        new ValueCartesiennean<>(new ExtendedSignDomain(ExtendedSignDomain.ExtendedSign.TOP), new TwoVarLinearInequality()),
         LiSA lisa = new LiSA(conf);
 
         lisa.run(program);
